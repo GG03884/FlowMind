@@ -1,0 +1,130 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User account and chronotype preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "preferences": {
+          "type": "object",
+          "properties": {
+            "chronotype": { "type": "string" },
+            "work_hours": {
+              "type": "object",
+              "properties": {
+                "start": { "type": "string" },
+                "end": { "type": "string" }
+              }
+            },
+            "high_energy_windows": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "momentumHistory": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "weekStartDate": { "type": "string" },
+              "score": { "type": "number" }
+            }
+          }
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "A productivity task representing actionable work, subtasks, and AI mitigation agent state",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "deadline": { "type": "string", "format": "date-time" },
+        "estimatedMinutes": { "type": "number" },
+        "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+        "status": { "type": "string", "enum": ["pending", "in_progress", "completed", "overdue"] },
+        "cognitiveLoad": { "type": "string", "enum": ["low", "medium", "high"] },
+        "escalationLevel": { "type": "number" },
+        "originType": { "type": "string" },
+        "subtasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "completed": { "type": "boolean" }
+            }
+          }
+        },
+        "mitigationDraft": {
+          "type": "object",
+          "properties": {
+            "subject": { "type": "string" },
+            "body": { "type": "string" },
+            "recipient": { "type": "string" },
+            "status": { "type": "string", "enum": ["none", "drafted", "sent"] }
+          }
+        },
+        "agentPlan": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["id", "userId", "title", "status"]
+    },
+    "Habit": {
+      "title": "Habit",
+      "description": "Recurring daily or weekly habits with streaks managed by the user and pro-actively scheduled by the agent",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "frequency": { "type": "string" },
+        "streakCount": { "type": "number" },
+        "lastCompleted": { "type": "string", "format": "date-time" },
+        "preferredScheduleSlot": { "type": "string" }
+      },
+      "required": ["id", "userId", "title"]
+    },
+    "AgentLog": {
+      "title": "AgentLog",
+      "description": "Chronological history of proactive actions and mitigations taken autonomously by the FlowMind AI companion",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "actionType": { "type": "string" },
+        "description": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "actionType", "description", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User preferences and settings"
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Root-level tasks searchable and editable by users"
+    },
+    "/habits/{habitId}": {
+      "schema": "Habit",
+      "description": "User habits"
+    },
+    "/agent_logs/{logId}": {
+      "schema": "AgentLog",
+      "description": "Autonomous companion audit logs"
+    }
+  }
+}

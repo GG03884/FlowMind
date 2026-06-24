@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth == null || request.auth.uid == userId || userId.startsWith('guest_');
+    }
+
+    match /tasks/{taskId} {
+      allow read, write: if request.auth == null || 
+                         (resource != null && resource.data.userId == request.auth.uid) || 
+                         (request.resource != null && request.resource.data.userId == request.auth.uid) ||
+                         (resource != null && resource.data.userId.startsWith('guest_')) ||
+                         (request.resource != null && request.resource.data.userId.startsWith('guest_'));
+    }
+
+    match /habits/{habitId} {
+      allow read, write: if request.auth == null || 
+                         (resource != null && resource.data.userId == request.auth.uid) || 
+                         (request.resource != null && request.resource.data.userId == request.auth.uid) ||
+                         (resource != null && resource.data.userId.startsWith('guest_')) ||
+                         (request.resource != null && request.resource.data.userId.startsWith('guest_'));
+    }
+
+    match /agent_logs/{logId} {
+      allow read, write: if request.auth == null || 
+                         (resource != null && resource.data.userId == request.auth.uid) || 
+                         (request.resource != null && request.resource.data.userId == request.auth.uid) ||
+                         (resource != null && resource.data.userId.startsWith('guest_')) ||
+                         (request.resource != null && request.resource.data.userId.startsWith('guest_'));
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "FlowMind",
+  "description": "A highly intelligent, agentic productivity companion that proactively plans, schedules, and mitigates delays on a user's behalf, featuring behavioral analytics and an immersive visual urgency dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
